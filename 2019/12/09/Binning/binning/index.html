@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+
+    <title>US579-blog | page </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"page","path":"2019/12/09/Binning/binning/"},"data":{"navigation":{"logo":{"text":"US579","type":"link","path":"index.html"},"main":[{"text":"ROUTINE","type":"label"},{"text":"MACHINE LEARNING","type":"label"},{"text":"Optimal Binning Algorithm","type":"link","path":"2019/12/08/Binning/binning/index.html"},{"text":"HMM","type":"link","path":"2019/12/08/HMM/hmm/index.html"},{"text":"ABOUT ME","type":"label"},{"text":"about","type":"link","path":"about/me.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"images/favicon.ico"}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">US579</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="Optimal-binning-algorithm-using-dynamic-programming"><a href="#Optimal-binning-algorithm-using-dynamic-programming" class="headerlink" title="Optimal binning algorithm using dynamic programming"></a>Optimal binning algorithm using dynamic programming</h1><p>Error Sum of Squares (SSE)</p>
+<p>SSE is the sum of the squared differences between each observation and its group’s mean. It can be used as a measure of variation within a cluster. If all cases within a cluster are identical the SSE would then be equal to 0.</p>
+<p>The formula for SSE is:</p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=SSE&space;=&space;\sum_{i=1}^{n}\left&space;(&space;x_{i}&space;\right&space;-\bar{x})^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?SSE&space;=&space;\sum_{i=1}^{n}\left&space;(&space;x_{i}&space;\right&space;-\bar{x})^2" title="SSE = \sum_{i=1}^{n}\left ( x_{i} \right -\bar{x})^2"></a></p>
+<p>Where n is the number of observations xi is the value of the ith observation and 0 is the mean of all the observations. This can also be rearranged to be written as seen in J.H. Ward’s paper.</p>
+<p>Recurisive method will compute many times, although its space complicity is lower than dynamic programming.</p>
+<p>In this case we apply dynamic programming, like Fibonacci sequence , we use privious consequence to compute the next by storing it in the mermory.</p>
+<p>this problem also implement this strategy </p>
+<p>the first row ,represent from that block divide into one bin</p>
+<p>[  ] [  ] [  ] [3, 1, 18, 11, 13, 17]    -1</p>
+<p>[  ] [  ] [  ] [1, 18, 11, 13, 17]       -1</p>
+<p>[  ] [  ] [  ] [18, 11, 13, 17]          -1</p>
+<p>[  ] [  ] [  ] [11, 13, 17]              18.666</p>
+<p>[  ] [  ] [  ] [13, 17]                   8.0</p>
+<p>[  ] [  ] [  ] [17]                       0</p>
+<p>the second row ,represent from that block divide into two bin</p>
+<p>[  ] [  ] [[3, 1, 18, 11, 13, 17]]        -1</p>
+<p>[  ] [  ] [[1, 18, 11, 13, 17]]           -1</p>
+<p>[  ] [  ] [[18, 11, 13, 17]]              18.666</p>
+<p>[  ] [  ] [[11, 13, 17]]                   2</p>
+<p>[  ] [  ] [[13, 17]]                       0</p>
+<p>[  ] [  ] [[17]]                          -1</p>
+<p>etc……</p>
+<p>Divding the problem into sub-problem , store the first row because it is the best optimal solution <code>[11, 13, 17]:18.666, [13, 17]:8.0,[17]:0,</code> after that when we are going to the second row,it will divide into two bins from the first number in the list, so<code>[18, 11, 13, 17]</code> can be split to prefix and suffix,which are <code>[18]</code> and <code>[11,13,17]</code>, (this is only the first situation,we still can split into <code>[[18,13],[13,17]] [[18,11,13],[17]]</code> and the rest will apply the same thinking)as we already know what the cost of<code>[11,13,17]</code> from the first row’s data which is 18.666(this is optimal)and the cost of <code>[18]</code> which is 0 , we are able to calculate the optimal cost that dividing <code>[18, 11, 13, 17]</code>into two bins is 0 + 18.999 == 18.999, so in the second row , the optimal cost of dividing <code>[18,11,13,17]</code> into two bins is 18.999 this is the core thinking of the dynamic programming.</p>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>
